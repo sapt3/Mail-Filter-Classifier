@@ -27,11 +27,16 @@ def extract_features(mail_dir):
 def make_Dictionary(train_dir):
     emails = [os.path.join(train_dir, f) for f in os.listdir(train_dir)]
     all_words = []
+    for mail in emails:
+        with open(mail) as m:
+            for i, line in enumerate(m):
+                if i == 2:  # Body of email is only 3rd line of text file
+                    words = line.split()
+                    all_words += words
 
     dictionary = Counter(all_words)
     # Paste code for non-word removal here(code snippet is given below)
     return dictionary
-
 # Create a dictionary of words with its frequency
 
 train_dir = 'train-mails'
@@ -47,8 +52,8 @@ train_matrix = extract_features(train_dir)
 
 model1 = MultinomialNB()
 model2 = LinearSVC()
-model1.fit(train_matrix,train_labels)
-model2.fit(train_matrix,train_labels)
+model1.fit(train_matrix, train_labels)
+model2.fit(train_matrix, train_labels)
 
 # Test the unseen mails for Spam
 test_dir = 'test-mails'
